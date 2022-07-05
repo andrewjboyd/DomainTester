@@ -1,0 +1,73 @@
+﻿@page "/"
+@inject IJSRuntime JS
+@using DomainTester.Services
+
+<PageTitle>Index</PageTitle>
+
+<h1>Url Tester</h1>
+
+<form class="form" @onsubmit="FormSubmit" @onsubmit:preventDefault>
+    <div class="form-group">
+    <label for="url" class="col-3">Enter a url for your site</label>
+    <input type="url" id="url" class="col-9" required autofocus="autofocus" @ref="UrlElement" @bind-value="@Model.Uri" />
+    </div>
+    <div class="form-group">
+    <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
+</form>
+
+
+@{
+    if (Results is not null)
+    {
+        <div>Url's to test for @Results.Url</div>
+        <table class="table">
+        <thead>
+        <tr>
+        <th>Url to test</th>
+        <th>Expected result</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var test in Results.UrlTestSuite)
+        {
+            <tr>
+            <td><a href="@test.Uri.ToString()" target="_blank">@test.Uri.ToString()</a></td>
+            <td>@test.ExpectedResult</td>
+            </tr>
+        }
+        </tbody>
+        </table>
+    }
+}
+
+@code {
+    private ElementReference UrlElement;
+
+    private FormData Model = new();
+
+    private FormResults? Results = null;
+
+    private async Task FormSubmit()
+    {
+        var url = new Url();
+        var uri = new Uri(Model.Uri);
+        var urlTestSuite = url.Execute(uri);
+
+        Results = new FormResults(uri, urlTestSuite);
+        Model.Uri = string.Empty;
+        await JS.SetFocusAsync(UrlElement);
+    }
+
+    internal struct FormData
+    {
+        public FormData(string uri)
+        {
+            Uri = uri;
+        }
+
+        public string Uri { get; set; }
+    }
+
+    internal record FormResults(Uri Url, IEnumerable<Url.UrlTestSuite> UrlTestSuite);
+}
