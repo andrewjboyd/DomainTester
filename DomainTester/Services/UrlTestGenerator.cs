@@ -1,6 +1,6 @@
 ﻿namespace DomainTester.Services
 {
-    public class Url
+    public class UrlTestGenerator
     {
         public IEnumerable<UrlTestSuite> Execute(Uri url)
         {

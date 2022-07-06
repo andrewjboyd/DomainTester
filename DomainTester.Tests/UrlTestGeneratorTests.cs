@@ -3,12 +3,12 @@ using FluentAssertions;
 
 namespace DomainTester.Tests
 {
-    public class UrlTests
+    public class UrlTestGeneratorTests
     {
         [Fact]
         public void When_UsingADomainWithoutAPage_Expect_FourCombinationsToTest()
         {
-            var url = new Url();
+            var url = new UrlTestGenerator();
 
             var result = url.Execute(new Uri("http://www.ajwebsolutions.com")).ToArray();
 
@@ -22,7 +22,7 @@ namespace DomainTester.Tests
         [Fact]
         public void When_UsingADomainWithoutAPageOnPort81_Expect_FourCombinationsToTest()
         {
-            var url = new Url();
+            var url = new UrlTestGenerator();
 
             Assert.Throws<ApplicationException>(() => url.Execute(new Uri("http://www.ajwebsolutions.com:81")).ToArray());
         }
@@ -30,7 +30,7 @@ namespace DomainTester.Tests
         [Fact]
         public void When_UsingADomainWithAPage_Expect_EightCombinationsToTest()
         {
-            var url = new Url();
+            var url = new UrlTestGenerator();
 
             var result = url.Execute(new Uri("http://www.ajwebsolutions.com/contactme")).ToArray();
 

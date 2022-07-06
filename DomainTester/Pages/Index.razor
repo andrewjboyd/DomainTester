@@ -50,7 +50,7 @@
 
     private async Task FormSubmit()
     {
-        var url = new Url();
+        var url = new UrlTestGenerator();
         var uri = new Uri(Model.Uri);
         var urlTestSuite = url.Execute(uri);
 
@@ -69,5 +69,5 @@
         public string Uri { get; set; }
     }
 
-    internal record FormResults(Uri Url, IEnumerable<Url.UrlTestSuite> UrlTestSuite);
+    internal record FormResults(Uri Url, IEnumerable<UrlTestGenerator.UrlTestSuite> UrlTestSuite);
 }
